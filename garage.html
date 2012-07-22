@@ -2,7 +2,7 @@
  <head>
  <title>Garage Door Opener</title>
  <meta name="apple-mobile-web-app-capable" content="yes">
- <meta name = "viewport" content = "width=device-width">
+ <meta name = "viewport" content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
  <link rel="apple-touch-icon" href="GarageLargeClosed.png" />
  <script type="text/javascript" src="jquery.min.js"></script>
  <script type="text/javascript" src="jquery.jsonp-2.3.1.min.js"></script> 
@@ -160,8 +160,8 @@ function preload(arrayOfImages) {
 }
 function displayConnectionError(textStatus) {
   displayError("Error","Unable to communicate with arduino: "+textStatus+
-    "<p /><input type=\"button\" onclick=\"startRefreshTimer(true)\" value=\"Retry\"/>"+
-    "<input type=\"button\" onclick=\"promptForDeviceKey()\" value=\"Set Key\"/>" );
+    "<p /><input type=\"button\" style=\"width: 100px\" onclick=\"startRefreshTimer(true)\" value=\"Retry\"/>&nbsp;"+
+    "<input type=\"button\" style=\"width: 100px\" onclick=\"promptForDeviceKey()\" value=\"Set Key\"/>" );
   stopRefreshTimer();
 }
 
@@ -241,6 +241,19 @@ display:none;
 }
 .show {
 display:inline;
+}
+input[type="button"] {
+    background: #b0b0b0;
+    width: 150px;
+    padding: 9px;
+    letter-spacing: 1px;
+    border: none;
+    color: #103390;
+    font-weight: bold;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    -webkit-appearance: none;
 }
 </style>
  </head>
