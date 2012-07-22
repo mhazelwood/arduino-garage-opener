@@ -1,0 +1,259 @@
+<html>
+ <head>
+ <meta name="apple-mobile-web-app-capable" content="yes">
+ <script type="text/javascript" src="jquery.min.js"></script>
+ <script type="text/javascript" src="jquery.jsonp-2.3.1.min.js"></script> 
+ <script type="text/javascript" src="jquery.cookie.js"></script>
+ <script type="text/javascript">
+var teleduinoUrl = "http://us01.proxy.teleduino.org/api/1.0/328.php";
+// device key will be prompted for and stored in a cookie
+var deviceKey;
+// arduino digital pin numbers
+var button1Pin = 2;
+var button2Pin = 3;
+var buzzerPin = 6;
+var door1ClosedPin = 5;
+var door2ClosedPin = 7;
+// output values of above pins
+var doorOutputOpen = 1;
+var doorOutputClosed = 0;
+var buttonPressedOutput = 1;
+var buttonReleasedOutput = 0;
+var buttonPressLength = 500;
+var refreshInterval = 1000;
+var allInputs;
+var refreshTimer;
+
+function getAllInputs() {
+  var url = teleduinoUrl + "?k=" + deviceKey + "&r=getAllInputs&o=jsonp&p=?";
+  console.log("Jsonp request to "+url);
+  var req = $.jsonp({
+    url: url,
+    cache: false,
+    timeout : 10000,
+    success: function(data){
+      hideDialog();
+      allInputs = data.response.values;
+      updateInputIndicators();
+    },
+    error: function(xOptions, textStatus){
+      displayConnectionError();
+    }
+  });
+}
+
+function startRefreshTimer(displayDialog) {
+  if(refreshTimer) {
+    stopRefreshTimer();
+  }
+  if(displayDialog) {
+    displayError("Connecting","Connecting to server...");
+  }
+  refreshTimer = setInterval(getAllInputs, refreshInterval);
+}
+
+function stopRefreshTimer() {
+    clearInterval(refreshTimer);
+}
+
+function setOutput(pin, output) {
+  var url = teleduinoUrl + "?k=" + deviceKey + 
+            "&r=setDigitalOutput&pin=" + pin + "&output=" + output + "&o=jsonp&p=?";
+  console.log("Jsonp request to "+url);
+  var req = $.jsonp({
+    url: url,
+    cache: false,
+    timeout : 10000,
+    success: function(data){
+    },
+    error: function(xOptions, textStatus){
+      displayConnectionError(textStatus)
+    }
+  });
+}
+
+function triggerReset() {
+  var url = teleduinoUrl + "?k=" + deviceKey + 
+            "&r=reset&o=jsonp&p=?";
+  console.log("Jsonp request to "+url);
+  var req = $.jsonp({
+    url: url,
+    cache: false,
+    timeout : 10000,
+    success: function(data){
+    },
+    error: function(xOptions, textStatus){
+    }
+  });
+}
+
+function updateInputIndicators() {
+  setIcon("#button1", "Large", allInputs[door1ClosedPin] == doorOutputClosed);
+  setIcon("#button2", "Small", allInputs[door2ClosedPin] == doorOutputClosed);
+}
+
+function setIcon(elem,door,closed) {
+  var image = $(elem).attr('src');
+  var wasClosed = image.indexOf("Closed") > -1;
+  if (closed && !wasClosed) {
+    image = "Garage"+door+"Closed.png";
+  } else if(!closed && wasClosed) {
+    image = "Garage"+door+"Open.png";
+  } else {
+    // no change
+    return;
+  }
+  console.log("$(\""+$(elem).attr("id")+"\").src = \""+image+"\"");
+  $(elem).attr('src', image);
+}
+
+function mouseDownImage(elem) {
+  var image = $(elem).attr('src');
+  var parts = image.split(".");
+  if(parts[0].indexOf("Pressed")==-1) {
+    image = parts[0]+"Pressed"+"."+parts[1];
+    console.log("$(\""+$(elem).attr("id")+"\").src = \""+image+"\"");
+    $(elem).attr('src', image);
+  }
+  return
+}
+
+function mouseUpImage(elem) {
+  var image = $(elem).attr('src');
+  var parts = image.split(".");
+  if(parts[0].indexOf("Pressed")>-1) {
+    parts[0] = parts[0].substr(0, parts[0].indexOf("Pressed") );
+    image = parts[0]+"."+parts[1];
+    console.log("$(\""+$(elem).attr("id")+"\").src = \""+image+"\"");
+    $(elem).attr('src', image);
+  }
+}
+
+function clickButton(pin) {
+  setOutput(pin, buttonPressedOutput);
+  setTimeout(function(){setOutput(pin, buttonReleasedOutput)},buttonPressLength);
+  setTimeout(function(){startRefreshTimer},buttonPressLength*2);
+}
+function button1Clicked() {
+  clickButton(button1Pin);
+}
+function button2Clicked() {
+  clickButton(button2Pin);
+}
+function buzzerClicked() {
+  clickButton(buzzerPin);
+}
+function resetClicked() {
+  if(confirm("Reset the controller?")) {
+    triggerReset();
+  }
+}
+function preload(arrayOfImages) {
+    $(arrayOfImages).each(function(){
+        (new Image()).src = this;
+    });
+}
+function displayConnectionError(textStatus) {
+  displayError("Error","Unable to communicate with arduino: "+textStatus+
+    "<p /><input type=\"button\" onclick=\"startRefreshTimer(true)\" value=\"Retry\"/>"+
+    "<input type=\"button\" onclick=\"promptForDeviceKey()\" value=\"Set Key\"/>" );
+  stopRefreshTimer();
+}
+
+function displayError(title,msg) {
+  var d = $("#dialog");
+  d.removeClass("hide");
+  d.addClass("show");
+  d.html("<h3 style=\"color:801010\">"+title+"</h3>"+msg);
+}
+function hideDialog(){
+  var d = $("#dialog");
+  d.removeClass("show");
+  d.addClass("hide");
+}
+
+function promptForDeviceKey() {
+  var newKey = prompt("Enter device key", deviceKey);
+  if(newKey) {
+    console.log("Device key changed from \""+deviceKey+"\" to \""+newKey+"\"");
+    deviceKey = newKey;
+    $.cookie("device-key", newKey, { expires: 3650 });
+    startRefreshTimer(true);
+  }
+}
+
+function getDeviceKeyFromCookie() {
+  deviceKey = $.cookie("device-key");
+  return deviceKey;
+}
+
+jQuery(document).ready(function() {
+  $("#button1").click(button1Clicked);
+  $("#button2").click(button2Clicked);
+  $("#buzzerButton").click(buzzerClicked);
+  $("#resetButton").click(resetClicked);
+  $("#button1").mousedown(function(){mouseDownImage($("#button1"));return false;});
+  $("#button1").mouseup(function(){mouseUpImage($("#button1"))});
+  $("#button1").mouseout(function(){mouseUpImage($("#button1"))});
+  $("#button2").mousedown(function(){mouseDownImage($("#button2"));return false;});
+  $("#button2").mouseup(function(){mouseUpImage($("#button2"))});
+  $("#button2").mouseout(function(){mouseUpImage($("#button2"))});
+  hideDialog();
+  if(getDeviceKeyFromCookie()) {
+    startRefreshTimer(true);
+  } else {
+    promptForDeviceKey();
+  }
+  preload(["GarageLargeClosed.png","GarageLargeClosedPressed.png","GarageLargeOpen.png","GarageLargeOpenPressed.png",
+    "GarageSmallClosed.png","GarageSmallClosedPressed.png","GarageSmallOpen.png","GarageSmallOpenPressed.png"]);
+});
+
+</script>
+<style type="text/css">
+body {
+background-color:#000000;
+color:#103390;
+}
+#buzzerButton {
+width:180px;
+}
+#resetButton {
+width:180px;
+margin-top:50px;
+}
+#dialog {
+background-color:#ffffff;
+color:#101020;
+position:absolute;
+left:10px;
+top:10px;
+border:5px groove ff8080;
+padding:25px;
+}
+.hide {
+display:none;
+}
+.show {
+display:inline;
+}
+</style>
+ </head>
+ <body>
+  <div id="garagediv1">
+    <img id="button1" src="GarageLargeClosed.png" width="180" height="180" />
+    <div id="g1status"><p /></div>
+  </div>
+  <div id="garagediv2">
+    <img id="button2" src="GarageSmallClosed.png" width="180" height="180" />
+    <div id="g2status"><p /></div>
+  </div>
+  <div id="buzzerdiv">
+    <input type="button" id="buzzerButton" value="Buzz" />
+  </div>
+  <div id="resetdiv">
+    <input type="button" id="resetButton" value="Reset Controller" />
+  </div>
+  <div id="dialog">
+  </div>
+ </body>
+</html>
