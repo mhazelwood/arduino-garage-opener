@@ -138,9 +138,11 @@ function clickButton(pin) {
   setTimeout(function(){startRefreshTimer},buttonPressLength*2);
 }
 function button1Clicked() {
+  mouseUpImage($("#button1"));
   clickButton(button1Pin);
 }
 function button2Clicked() {
+  mouseUpImage($("#button2"));
   clickButton(button2Pin);
 }
 function buzzerClicked() {
@@ -191,15 +193,15 @@ function getDeviceKeyFromCookie() {
 }
 
 jQuery(document).ready(function() {
-  $("#button1").click(button1Clicked);
-  $("#button2").click(button2Clicked);
+  //$("#button1").click(button1Clicked);
+  //$("#button2").click(button2Clicked);
   $("#buzzerButton").click(buzzerClicked);
   $("#resetButton").click(resetClicked);
-  $("#button1").mousedown(function(){mouseDownImage($("#button1"));return false;});
-  $("#button1").mouseup(function(){mouseUpImage($("#button1"))});
+  $("#button1").bind('touchstart mousedown',function(){mouseDownImage($("#button1"));return false;});
+  $("#button1").bind('touchend mouseup',function(){button1Clicked(event)});
   $("#button1").mouseout(function(){mouseUpImage($("#button1"))});
-  $("#button2").mousedown(function(){mouseDownImage($("#button2"));return false;});
-  $("#button2").mouseup(function(){mouseUpImage($("#button2"))});
+  $("#button2").bind('touchstart mousedown',function(){mouseDownImage($("#button2"));return false;});
+  $("#button2").bind('touchend mouseup',function(){button2Clicked(event)});
   $("#button2").mouseout(function(){mouseUpImage($("#button2"))});
   hideDialog();
   if(getDeviceKeyFromCookie()) {
@@ -216,6 +218,7 @@ jQuery(document).ready(function() {
 body {
 background-color:#000000;
 color:#103390;
+text-align:center;
 }
 #buzzerButton {
 width:180px;
