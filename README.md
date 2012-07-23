@@ -16,3 +16,4 @@ More information to come. For now, here are some pictures.
 ![Screenshot](https://github.com/downloads/mhazelwood/arduino-garage-opener/OutsideBox.JPG)
 
 ![Screenshot](https://github.com/downloads/mhazelwood/arduino-garage-opener/FinishedInstall.JPG)
+
