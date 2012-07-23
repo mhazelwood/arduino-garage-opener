@@ -17,3 +17,5 @@ More information to come. For now, here are some pictures.
 
 ![Screenshot](https://github.com/downloads/mhazelwood/arduino-garage-opener/FinishedInstall.JPG)
 
+![Screenshot](https://github.com/downloads/mhazelwood/arduino-garage-opener/Schematic.png)
+
