@@ -23,7 +23,7 @@ var doorOutputClosed = 0;
 var buttonPressedOutput = 1;
 var buttonReleasedOutput = 0;
 var buttonPressLength = 500;
-var refreshInterval = 1000;
+var refreshInterval = 2000;
 var allInputs;
 var refreshTimer;
 
@@ -135,6 +135,7 @@ function mouseUpImage(elem) {
 function clickButton(pin) {
   setOutput(pin, buttonPressedOutput);
   setTimeout(function(){setOutput(pin, buttonReleasedOutput)},buttonPressLength);
+  setTimeout(function(){setOutput(pin, buttonReleasedOutput)},buttonPressLength*2);
   setTimeout(function(){startRefreshTimer},buttonPressLength*2);
 }
 function button1Clicked() {
