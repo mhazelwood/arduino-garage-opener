@@ -11,8 +11,10 @@ More information to come. For now, here are some pictures.
 
 ![Screenshot](https://github.com/downloads/mhazelwood/arduino-garage-opener/InsideBox.JPG)
 
+Protoboard on an [Arduino Ethernet Shield](http://arduino.cc/en/Main/ArduinoEthernetShield) on an [Arduino Uno](http://arduino.cc/en/Main/ArduinoBoardUno).
 ![Screenshot](https://github.com/downloads/mhazelwood/arduino-garage-opener/SideView.JPG)
 
+Reset button, green LED (for Teleduino status), yellow LED (shows closed switch for large garage door) and red LED (shows closed switch for small garage door). Also a buzzer on the side which for now is just for fun, but I plan to have it buzz as a warning that the door is about to be remotely activated.
 ![Screenshot](https://github.com/downloads/mhazelwood/arduino-garage-opener/OutsideBox.JPG)
 
 ![Screenshot](https://github.com/downloads/mhazelwood/arduino-garage-opener/FinishedInstall.JPG)
