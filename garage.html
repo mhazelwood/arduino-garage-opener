@@ -8,7 +8,7 @@
  <script type="text/javascript" src="jquery.jsonp-2.3.1.min.js"></script> 
  <script type="text/javascript" src="jquery.cookie.js"></script>
  <script type="text/javascript">
-var teleduinoUrl = "http://us01.proxy.teleduino.org/api/1.0/328.php";
+var teleduinoUrl = "https://us01.proxy.teleduino.org/api/1.0/328.php";
 // device key will be prompted for and stored in a cookie
 var deviceKey;
 // arduino digital pin numbers
@@ -59,9 +59,12 @@ function stopRefreshTimer() {
     clearInterval(refreshTimer);
 }
 
-function setOutput(pin, output) {
+function setOutput(pin, output, timeout) {
   var url = teleduinoUrl + "?k=" + deviceKey + 
             "&r=setDigitalOutput&pin=" + pin + "&output=" + output + "&o=jsonp&p=?";
+  if(timeout) {
+    url+="&expire_time="+timeout; // in milliseconds
+  }
   console.log("Jsonp request to "+url);
   var req = $.jsonp({
     url: url,
@@ -133,9 +136,9 @@ function mouseUpImage(elem) {
 }
 
 function clickButton(pin) {
-  setOutput(pin, buttonPressedOutput);
-  setTimeout(function(){setOutput(pin, buttonReleasedOutput)},buttonPressLength);
-  setTimeout(function(){setOutput(pin, buttonReleasedOutput)},buttonPressLength*2);
+  setOutput(pin, buttonPressedOutput,buttonPressLength);
+  //setTimeout(function(){setOutput(pin, buttonReleasedOutput)},buttonPressLength);
+  //setTimeout(function(){setOutput(pin, buttonReleasedOutput)},buttonPressLength*2);
   setTimeout(function(){startRefreshTimer},buttonPressLength*2);
 }
 function button1Clicked() {
