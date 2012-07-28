@@ -5,8 +5,6 @@ My [Arduino](http://www.arduino.cc/)-based garage door opener allows me to contr
 
 For security reasons the Teleduino API key is not included in the source.  Instead it is prompted for and stored in a cookie. 
 
-More information to come. For now, here are some pictures.
-
 I created an [iPhone web app](http://www.apple.com/webapps/whatarewebapps.html) to control the garage doors using [jQuery](http://jquery.com/).  The images change to show whether each door is open or closed.  The top one is for the large (2 car) garage door, and the bottom one is for the small (1 car) garage.
 ![Screenshot](https://github.com/downloads/mhazelwood/arduino-garage-opener/iPhoneScreenshot.png)
 
@@ -24,4 +22,3 @@ Finished installation mounted on top of one of the garage door openers using two
 
 Schematic diagram of this project created using [OmniGraffle](http://www.omnigroup.com/products/omnigraffle/).
 ![Screenshot](https://github.com/downloads/mhazelwood/arduino-garage-opener/Schematic.png)
-
