@@ -1,13 +1,20 @@
-<html>
- <head>
- <title>Garage Door Opener</title>
- <meta name="apple-mobile-web-app-capable" content="yes">
- <meta name = "viewport" content = "width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0">
- <link rel="apple-touch-icon" href="GarageLargeClosed.png" />
- <script type="text/javascript" src="jquery.min.js"></script>
- <script type="text/javascript" src="jquery.jsonp-2.3.1.min.js"></script> 
- <script type="text/javascript" src="jquery.cookie.js"></script>
- <script type="text/javascript">
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta name="generator" content="HTML Tidy for Linux (vers 25 March 2009), see www.w3.org" />
+<title>Garage Door Opener</title>
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+<link rel="apple-touch-icon" href="GarageLargeClosed.png" />
+<script type="text/javascript" src="jquery.min.js">
+</script>
+<script type="text/javascript" src="jquery.jsonp-2.3.1.min.js">
+</script>
+<script type="text/javascript" src="jquery.cookie.js">
+</script>
+<script type="text/javascript">
+//<![CDATA[
 var teleduinoUrl = "https://us01.proxy.teleduino.org/api/1.0/328.php";
 // device key will be prompted for and stored in a cookie
 var deviceKey;
@@ -173,7 +180,7 @@ function displayError(title,msg) {
   var d = $("#dialog");
   d.removeClass("hide");
   d.addClass("show");
-  d.html("<h3 style=\"color:801010\">"+title+"</h3>"+msg);
+  d.html("<h3 style=\"color:801010\">"+title+"<\/h3>"+msg);
 }
 function hideDialog(){
   var d = $("#dialog");
@@ -217,8 +224,10 @@ jQuery(document).ready(function() {
     "GarageSmallClosed.png","GarageSmallClosedPressed.png","GarageSmallOpen.png","GarageSmallOpenPressed.png"]);
 });
 
+//]]>
 </script>
 <style type="text/css">
+/*<![CDATA[*/
 body {
 background-color:#000000;
 color:#103390;
@@ -259,24 +268,19 @@ input[type="button"] {
     -webkit-border-radius: 3px;
     -webkit-appearance: none;
 }
+/*]]>*/
 </style>
- </head>
- <body>
-  <div id="garagediv1">
-    <img id="button1" src="GarageLargeClosed.png" width="180" height="180" />
-    <div id="g1status"><p /></div>
-  </div>
-  <div id="garagediv2">
-    <img id="button2" src="GarageSmallClosed.png" width="180" height="180" />
-    <div id="g2status"><p /></div>
-  </div>
-  <div id="buzzerdiv">
-    <input type="button" id="buzzerButton" value="Buzz" />
-  </div>
-  <div id="resetdiv">
-    <input type="button" id="resetButton" value="Reset Controller" />
-  </div>
-  <div id="dialog">
-  </div>
- </body>
+</head>
+<body>
+<div id="garagediv1"><img id="button1" src="GarageLargeClosed.png" width="180" height="180" alt="Large Garage Door" />
+<div id="g1status"></div>
+</div>
+<div id="garagediv2"><img id="button2" src="GarageSmallClosed.png" width="180" height="180" alt="Small Garage Door" />
+<div id="g2status"></div>
+</div>
+<div id="buzzerdiv"><input type="button" id="buzzerButton" value="Buzz" /></div>
+<div id="resetdiv"><input type="button" id="resetButton" value="Reset Controller" /></div>
+<div id="dialog"></div>
+</body>
 </html>
+
